@@ -47,38 +47,38 @@ GA_STRATEGIES = {
     'aggressive_exploration': {
         'name': 'Aggressive Exploration',
         'description': 'Small population, high mutation for rapid exploration, with enhanced stability to increase success rate.',
-        'population_size': 350,        # 550 → 350 (daha hızlı)
-        'max_iterations': 25,          # 45 → 25 (daha az nesil)
+        'population_size': 350,      
+        'max_iterations': 25,          
         'elitism_ratio': 0.03,         
         'mutation_rate': 0.33,         
         'mutation_span': 4,            
         'mutation_genom_rate': 0.22,   
         'tournament_size': 3,          
-        'runs': 10,  # 3 → 10 (daha çok run)
+        'runs': 10,  
     },
     'balanced_strategy': {
         'name': 'Balanced Strategy',
         'description': 'A more robust balanced approach with a larger population and stronger selection for better overall performance.',
-        'population_size': 700,        # 1200 → 700 (daha hızlı)
-        'max_iterations': 35,          # 65 → 35 (daha az nesil)
+        'population_size': 700,       
+        'max_iterations': 35,         
         'elitism_ratio': 0.10,         
         'mutation_rate': 0.15,         
         'mutation_span': 3,            
         'mutation_genom_rate': 0.10,   
         'tournament_size': 6,          
-        'runs': 10,  # 3 → 10 (daha çok run)
+        'runs': 10,  
     },
     'conservative_exploitation': {
         'name': 'Conservative Exploitation',
         'description': 'Fine-tuning focus with carefully controlled mutation to reduce crash rate while maintaining high fitness.',
-        'population_size': 1200,       # 2000 → 1200 (daha hızlı)
-        'max_iterations': 45,          # 85 → 45 (daha az nesil)
+        'population_size': 1200,      
+        'max_iterations': 45,         
         'elitism_ratio': 0.15,         
         'mutation_rate': 0.05,         
         'mutation_span': 2,            
         'mutation_genom_rate': 0.03,   
         'tournament_size': 8,          
-        'runs': 10,  # 3 → 10 (daha çok run)
+        'runs': 10,  
     },
 }
 
