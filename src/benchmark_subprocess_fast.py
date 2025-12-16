@@ -1,22 +1,14 @@
 """
-Non-invasive Benchmark Runner for Fuzzy Logic Vehicle GA Optimization
-Subprocess approach - runs genetic_algorithm.py multiple times with different strategies
-Generates 4 comprehensive CSV reports
+FAST BENCHMARK - Quick Testing Version
+Same as benchmark_subprocess.py but with MINIMAL parameters for quick results
+Expected runtime: ~30-45 minutes total (vs 3-5 hours for full benchmark)
 
-Strategy Comparison:
-  1. AGGRESSIVE_EXPLORATION: High mutation, high diversity
-  2. BALANCED_STRATEGY: Moderate exploration-exploitation  
-  3. CONSERVATIVE_EXPLOITATION: Low mutation, strong convergence
+Reduced from:
+  - 3 runs per combo → 1 run per combo (6 runs total instead of 18)
+  - Population sizes: 500/1000/1500 → 100/200/300
+  - Generations: 15/20/30 → 5/8/10
 
-Paths:
-  - convex: Simple geometric polygon
-  - sin: Complex sinuous path
-
-Output:
-  1. benchmark_detailed_runs_*.csv - All individual runs with metrics
-  2. benchmark_strategy_comparison_*.csv - Strategies vs paths
-  3. benchmark_path_comparison_*.csv - Paths vs strategies
-  4. benchmark_summary_statistics_*.csv - Overall summary statistics
+This gives you quick results to verify everything works!
 """
 
 import os
@@ -40,45 +32,45 @@ import decoder
 
 
 # ============================================================================
-# BENCHMARK CONFIGURATION - 3 STRATEGIES × 2 PATHS
+# FAST BENCHMARK CONFIGURATION - MINIMAL FOR QUICK TESTING
 # ============================================================================
 
 GA_STRATEGIES = {
     'aggressive_exploration': {
         'name': 'Aggressive Exploration',
-        'description': 'Small population, high mutation for rapid exploration, with enhanced stability to increase success rate.',
-        'population_size': 350,        # 550 → 350 (daha hızlı)
-        'max_iterations': 25,          # 45 → 25 (daha az nesil)
-        'elitism_ratio': 0.03,         
-        'mutation_rate': 0.33,         
-        'mutation_span': 4,            
-        'mutation_genom_rate': 0.22,   
-        'tournament_size': 3,          
-        'runs': 10,  # 3 → 10 (daha çok run)
+        'description': 'High mutation, high diversity',
+        'population_size': 30,        # ULTRA-MINIMAL FOR QUICK TEST
+        'max_iterations': 2,          # ULTRA-MINIMAL FOR QUICK TEST
+        'elitism_ratio': 0.02,
+        'mutation_rate': 0.25,
+        'mutation_span': 3,
+        'mutation_genom_rate': 0.15,
+        'tournament_size': 3,
+        'runs': 1,
     },
     'balanced_strategy': {
         'name': 'Balanced Strategy',
-        'description': 'A more robust balanced approach with a larger population and stronger selection for better overall performance.',
-        'population_size': 700,        # 1200 → 700 (daha hızlı)
-        'max_iterations': 35,          # 65 → 35 (daha az nesil)
-        'elitism_ratio': 0.10,         
-        'mutation_rate': 0.15,         
-        'mutation_span': 3,            
-        'mutation_genom_rate': 0.10,   
-        'tournament_size': 6,          
-        'runs': 10,  # 3 → 10 (daha çok run)
+        'description': 'Moderate exploration-exploitation',
+        'population_size': 50,        # ULTRA-MINIMAL FOR QUICK TEST
+        'max_iterations': 3,          # ULTRA-MINIMAL FOR QUICK TEST
+        'elitism_ratio': 0.05,
+        'mutation_rate': 0.1,
+        'mutation_span': 2,
+        'mutation_genom_rate': 0.1,
+        'tournament_size': 5,
+        'runs': 1,
     },
     'conservative_exploitation': {
         'name': 'Conservative Exploitation',
-        'description': 'Fine-tuning focus with carefully controlled mutation to reduce crash rate while maintaining high fitness.',
-        'population_size': 1200,       # 2000 → 1200 (daha hızlı)
-        'max_iterations': 45,          # 85 → 45 (daha az nesil)
-        'elitism_ratio': 0.15,         
-        'mutation_rate': 0.05,         
-        'mutation_span': 2,            
-        'mutation_genom_rate': 0.03,   
-        'tournament_size': 8,          
-        'runs': 10,  # 3 → 10 (daha çok run)
+        'description': 'Low mutation, strong convergence',
+        'population_size': 80,        # ULTRA-MINIMAL FOR QUICK TEST
+        'max_iterations': 4,          # ULTRA-MINIMAL FOR QUICK TEST
+        'elitism_ratio': 0.15,
+        'mutation_rate': 0.05,
+        'mutation_span': 1,
+        'mutation_genom_rate': 0.05,
+        'tournament_size': 7,
+        'runs': 1,
     },
 }
 
@@ -178,7 +170,7 @@ class BenchmarkMetrics:
 
 
 # ============================================================================
-# BENCHMARK RUNNER - SUBPROCESS APPROACH
+# BENCHMARK RUNNER - FAST VERSION
 # ============================================================================
 
 class BenchmarkRunner:
@@ -192,22 +184,26 @@ class BenchmarkRunner:
     
     def _setup_output_dir(self):
         """Create output directory for results with timestamp"""
-        # Format: results/benchmark/benchmark_YYYYMMDD_HHMMSS/
-        results_dir = os.path.join(os.path.dirname(__file__), 'results', 'benchmark', f'benchmark_{self.timestamp}')
+        # Format: results/benchmark_fast/bmfast_YYYYMMDD_HHMMSS/
+        results_dir = os.path.join(os.path.dirname(__file__), 'results', 'benchmark_fast', f'bmfast_{self.timestamp}')
         os.makedirs(results_dir, exist_ok=True)
         return results_dir
     
     def run_full_benchmark(self):
         """Execute complete benchmark across all strategies and paths"""
         print("\n" + "="*80)
-        print("FUZZY LOGIC VEHICLE BENCHMARK - SUBPROCESS APPROACH")
-        print("3 Strategies × 2 Paths × N Runs = Comprehensive Comparison")
+        print("FUZZY LOGIC VEHICLE BENCHMARK - FAST VERSION (FOR TESTING)")
         print("="*80)
         
         total_runs = sum(cfg['runs'] for cfg in GA_STRATEGIES.values()) * len(PATHS)
-        print(f"\nTotal planned runs: {total_runs}")
-        print(f"Paths: {', '.join(PATHS)}")
-        print(f"Strategies: {', '.join(GA_STRATEGIES.keys())}")
+        print(f"\nFast Configuration (QUICK TEST):")
+        print(f"  - Total runs: {total_runs} (reduced from 18)")
+        print(f"  - Runs per combo: 1 (reduced from 3)")
+        print(f"  - Population sizes: 30/50/80 (ULTRA-MINIMAL)")
+        print(f"  - Generations: 2/3/4 (ULTRA-MINIMAL)")
+        print(f"  - Expected time: 5-10 minutes")
+        print(f"  - Paths: {', '.join(PATHS)}")
+        print(f"  - Strategies: {', '.join(GA_STRATEGIES.keys())}")
         
         run_counter = 0
         
@@ -221,7 +217,6 @@ class BenchmarkRunner:
             for strategy_name, strategy_config in GA_STRATEGIES.items():
                 print(f"\n{'*'*80}")
                 print(f"STRATEGY: {strategy_config['name'].upper()}")
-                print(f"Description: {strategy_config['description']}")
                 print(f"Config: Pop={strategy_config['population_size']} Gen={strategy_config['max_iterations']} Mut={strategy_config['mutation_rate']}")
                 print(f"{'*'*80}")
                 
@@ -268,7 +263,7 @@ class BenchmarkRunner:
         metrics.training_time = time.time() - start_time
         metrics.fitness_value = best_chromosome.fitness
         
-        print(f"  ✓ Training completed in {metrics.training_time:.2f}s | Fitness: {metrics.fitness_value:.6f}")
+        print(f"  Training completed in {metrics.training_time:.2f}s | Fitness: {metrics.fitness_value:.6f}")
         
         # Evaluate vehicle performance
         self._evaluate_vehicle_performance(best_chromosome, road_matrix, metrics)
@@ -314,7 +309,7 @@ class BenchmarkRunner:
             population = ga.np.array(new_population)
             
             best = ga.get_best_chromosome(population)
-            if (iteration + 1) % 5 == 0 or iteration == config['max_iterations'] - 1:
+            if (iteration + 1) % max(1, config['max_iterations'] // 3) == 0 or iteration == config['max_iterations'] - 1:
                 avg_fitness = ga.np.mean([c.fitness for c in population])
                 print(f"    Gen {iteration+1:3d}/{config['max_iterations']}: Best={best.fitness:.6f} Avg={avg_fitness:.6f}")
         
@@ -375,7 +370,7 @@ class BenchmarkRunner:
         if steering_angles:
             metrics.steering_stability = float(ga.np.std(steering_angles))
         
-        print(f"    Vehicle: Dist={metrics.total_distance:.1f} Iter={metrics.iterations_completed} Success={'✓' if metrics.success_rate > 0 else '✗'}")
+        print(f"    Vehicle: Dist={metrics.total_distance:.1f} Iter={metrics.iterations_completed} Success={'Yes' if metrics.success_rate > 0 else 'No'}")
     
     def calculate_summary(self):
         """Calculate summary statistics grouped by strategy and path"""
@@ -420,7 +415,6 @@ class BenchmarkRunner:
         # 4. Summary statistics
         self._export_summary_statistics()
         
-        # 5. Console summary (also saves to TXT)
         self.print_console_summary()
     
     def _export_detailed_runs(self):
@@ -441,12 +435,9 @@ class BenchmarkRunner:
         
         metrics_to_compare = [
             ('Fitness (lower is better)', 'avg_fitness'),
-            ('Fitness Std Dev', 'std_fitness'),
             ('Avg Distance', 'avg_distance'),
             ('Success Rate (%)', 'success_rate'),
             ('Avg Efficiency', 'avg_efficiency'),
-            ('Avg Iterations', 'avg_iterations'),
-            ('Crash Rate (%)', 'crash_rate'),
         ]
         
         with open(csv_path, 'w', newline='', encoding='utf-8') as f:
@@ -469,7 +460,7 @@ class BenchmarkRunner:
                     
                     diff = convex_avg - sin_avg
                     
-                    if key in ['avg_fitness', 'std_fitness', 'crash_rate']:
+                    if key in ['avg_fitness', 'crash_rate']:
                         convex_better = 'Yes' if convex_avg < sin_avg else 'No'
                     else:
                         convex_better = 'Yes' if convex_avg > sin_avg else 'No'
@@ -501,8 +492,6 @@ class BenchmarkRunner:
             ('Fitness (lower is better)', 'avg_fitness'),
             ('Avg Distance', 'avg_distance'),
             ('Success Rate (%)', 'success_rate'),
-            ('Avg Efficiency', 'avg_efficiency'),
-            ('Crash Rate (%)', 'crash_rate'),
         ]
         
         with open(csv_path, 'w', newline='', encoding='utf-8') as f:
@@ -642,9 +631,9 @@ class BenchmarkRunner:
 
 
 if __name__ == '__main__':
-    """Run comprehensive benchmark with 3 strategies on 2 paths"""    
-    print("\n[*] Starting Benchmark Runner - Subprocess Approach")
+    """Run fast benchmark for quick testing"""
+    print("\n[*] Starting FAST Benchmark")
     runner = BenchmarkRunner()
     runner.run_full_benchmark()
-    print("\n[✓] Benchmark completed successfully!")
+    print("\n[OK] Fast benchmark completed!")
     print(f"[*] Results saved to: {runner.output_dir}")

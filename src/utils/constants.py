@@ -35,7 +35,7 @@ SCREEN_MATRIX_CONVEX = "screen_matrix_convex.txt"
 USE_CONVEX_POLYGON = False
 USE_SIN_POLYGON = True
 
-PRETRAINED_FUZZY_PATH = "best_res.pickle"
+PRETRAINED_FUZZY_PATH = "best_worst_aggressive_exploration_sin_best.pickle"
 
 FONT_SIZE = 20
 TAB = '    '

@@ -1,0 +1,7 @@
+strategy,path,num_runs,avg_fitness,std_fitness,min_fitness,max_fitness,avg_distance,avg_iterations,success_rate_pct,avg_efficiency,crash_rate_pct
+aggressive_exploration,convex,3,41.871161,4.302622,35.855000,45.668663,15939.34,500.0,100.0,366.560155,0.0
+aggressive_exploration,sin,3,24.740681,2.392529,22.270000,27.978044,17865.89,498.7,66.7,727.509598,33.3
+balanced_strategy,convex,3,41.163673,2.953403,37.017964,43.676647,24674.63,500.0,100.0,595.185683,0.0
+balanced_strategy,sin,3,27.733667,6.939158,17.960000,33.385000,13422.52,360.3,33.3,560.504320,33.3
+conservative_exploitation,convex,3,42.134398,2.547924,38.582834,44.437126,25739.06,493.7,66.7,604.151846,0.0
+conservative_exploitation,sin,3,26.958438,6.457366,17.826347,31.532000,16740.58,500.0,100.0,658.250912,0.0

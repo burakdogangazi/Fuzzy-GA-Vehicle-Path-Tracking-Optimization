@@ -17,10 +17,12 @@ import vehicle
 from utils import constants, path_generator
 import pickle 
 import argparse
+import cv2
+from datetime import datetime
 
 
 class Simulation:
-    def __init__(self, path, closed_polygon):
+    def __init__(self, path, closed_polygon, save_video=False, polygon_name="convex"):
         pygame.init()
         pygame.display.set_caption("Trained car")
         self.screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT), DOUBLEBUF)
@@ -35,6 +37,15 @@ class Simulation:
 
         self.path = path
         self.closed_polygon = closed_polygon
+        
+        # Video kaydetme
+        self.save_video = save_video
+        self.polygon_name = polygon_name
+        self.video_writer = None
+        self.frames = []
+        
+        if self.save_video:
+            self._setup_video_output()
 
     def run(self, FSAngle, FSVelocity):
         car = vehicle.Car(constants.CAR_POS_X, constants.CAR_POS_Y, constants.CAR_ANGLE)
@@ -54,11 +65,20 @@ class Simulation:
             self.car.update(dt, ds, drot)
 
             current_pixel_color = self.draw_screen(fuzzy_text)
+            
+            # Video frame kaydet
+            if self.save_video:
+                self._capture_frame()
+            
             iteration = iteration + 1
             if self.car.is_idle(iteration) or self.car.is_collided(current_pixel_color):
                 break
 
             self.clock.tick(self.ticks)
+
+        # Video'yu kapat ve kaydet
+        if self.save_video:
+            self._finalize_video()
 
         pygame.quit()
         return vehicle.distance(self.car.center_position().x, self.car.center_position().y, constants.GOAL.x, constants.GOAL.y)
@@ -103,10 +123,58 @@ class Simulation:
                 else:
                     draw_color = constants.SCREEN_COLOR
                 pygame.draw.polygon(screen, draw_color, polygon)
+    
+    def _setup_video_output(self):
+        """Video çıktı klasörünü hazırla"""
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        output_base = os.path.join(current_dir, '..', 'results', 'simulation_outputs')
+        os.makedirs(output_base, exist_ok=True)
+        
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        self.video_filename = f"simulation_{self.polygon_name}_{timestamp}.mp4"
+        self.video_path = os.path.join(output_base, self.video_filename)
+        print(f"\n[*] Video kaydedilecek: {self.video_path}")
+    
+    def _capture_frame(self):
+        """Pygame screen'den frame yakala"""
+        # Screen'ı numpy array'e dönüştür
+        frame_array = pygame.surfarray.array3d(self.screen)
+        # Axis swap: (width, height, 3) -> (height, width, 3)
+        frame_array = np.transpose(frame_array, (1, 0, 2))
+        # RGB -> BGR
+        frame_bgr = cv2.cvtColor(frame_array, cv2.COLOR_RGB2BGR)
+        self.frames.append(frame_bgr)
+    
+    def _finalize_video(self):
+        """Frame'leri video dosyasına kaydet"""
+        if not self.frames:
+            print("[!] Kaydedilecek frame yok!")
+            return
+        
+        # Video writer
+        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+        fps = 30
+        frame_height, frame_width, _ = self.frames[0].shape
+        
+        video_writer = cv2.VideoWriter(
+            self.video_path, 
+            fourcc, 
+            fps, 
+            (frame_width, frame_height)
+        )
+        
+        # Frame'leri video'ya yaz
+        for frame in self.frames:
+            video_writer.write(frame)
+        
+        video_writer.release()
+        print(f"[✓] Video kaydedildi: {self.video_path}")
+        print(f"[*] Toplam frame: {len(self.frames)}")
+        print(f"[*] Video süresi: {len(self.frames)/fps:.2f} saniye")
 
-def simulate(path, is_closed, FSAngle, FSVelocity):
+def simulate(path, is_closed, FSAngle, FSVelocity, save_video=False, polygon_name="convex"):
     os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % constants.SCREEN_POSITION
-    game = Simulation(path, is_closed)
+    game = Simulation(path, is_closed, save_video=save_video, polygon_name=polygon_name)
     return(game.run(FSAngle, FSVelocity))
 
 if __name__ == '__main__':
@@ -115,9 +183,11 @@ if __name__ == '__main__':
     """
     parser = argparse.ArgumentParser()
     parser.add_argument('--polygon', choices=['convex', 'sin'], help='Runs the simulation with pretrained fuzzy system on a choosen polygon', required=True)
+    parser.add_argument('--save-video', action='store_true', help='Simülasyonu video olarak kaydet')
 
     args = parser.parse_args()
     polygon = args.polygon
+    save_video = args.save_video
 
     if polygon != "convex":
         path, is_closed = path_generator.generate_sin_path()
@@ -134,4 +204,4 @@ if __name__ == '__main__':
     print(FSAngle)
     print(FSVelocity)
 
-    simulate(path, is_closed, FSAngle, FSVelocity)
+    simulate(path, is_closed, FSAngle, FSVelocity, save_video=save_video, polygon_name=polygon)

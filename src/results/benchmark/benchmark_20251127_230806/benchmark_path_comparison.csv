@@ -1,0 +1,11 @@
+metric,path,aggressive_avg,balanced_avg,conservative_avg,aggressive_std,balanced_std,conservative_std,best_strategy,worst_strategy
+Fitness (lower is better),convex,41.871161,41.163673,42.134398,4.302622,2.953403,2.547924,balanced_strategy,conservative_exploitation
+Fitness (lower is better),sin,24.740681,27.733667,26.958438,2.392529,6.939158,6.457366,aggressive_exploration,balanced_strategy
+Avg Distance,convex,15939.338837,24674.625579,25739.056568,0.000000,0.000000,0.000000,conservative_exploitation,aggressive_exploration
+Avg Distance,sin,17865.892804,13422.520754,16740.583860,0.000000,0.000000,0.000000,aggressive_exploration,balanced_strategy
+Success Rate (%),convex,1.000000,1.000000,0.666667,0.000000,0.000000,0.000000,aggressive_exploration,conservative_exploitation
+Success Rate (%),sin,0.666667,0.333333,1.000000,0.000000,0.000000,0.000000,conservative_exploitation,balanced_strategy
+Avg Efficiency,convex,366.560155,595.185683,604.151846,0.000000,0.000000,0.000000,conservative_exploitation,aggressive_exploration
+Avg Efficiency,sin,727.509598,560.504320,658.250912,0.000000,0.000000,0.000000,aggressive_exploration,balanced_strategy
+Crash Rate (%),convex,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,aggressive_exploration,aggressive_exploration
+Crash Rate (%),sin,0.333333,0.333333,0.000000,0.000000,0.000000,0.000000,conservative_exploitation,aggressive_exploration
