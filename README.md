@@ -1,4 +1,4 @@
-#  Fuzzy Logic + Genetic Algorithm Vehicle Path Optimization
+#  Fuzzy Logic + Genetic Algorithm Vehicle Path Tracking Optimization
 
 **Short description:** This project uses fuzzy logic controllers (angle & velocity) optimized by a genetic algorithm (GA) to train a simulated vehicle to follow generated paths. It includes tools to run training/benchmarks and an interactive simulation viewer.
 
